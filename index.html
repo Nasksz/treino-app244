@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Treino Avançado</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00ffcc">
+
+<style>
+body {
+  margin: 0;
+  background: #0e0e0e;
+  font-family: Arial, sans-serif;
+  color: #eaeaea;
+}
+header {
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(90deg,#111,#1c1c1c);
+}
+h1 { color:#00ffcc; }
+.day {
+  margin: 20px;
+  background: #161616;
+  border-radius: 16px;
+  padding: 20px;
+}
+h2 { color:#00ffcc; }
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+th,td {
+  padding:8px;
+  border-bottom:1px solid #333;
+  text-align:center;
+}
+input {
+  width:60px;
+  background:#000;
+  color:#00ffcc;
+  border:1px solid #00ffcc;
+  border-radius:6px;
+}
+.cardio { color:#ff5555; margin-top:10px; }
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Treino Avançado</h1>
+<p>Hipertrofia + Emagrecimento • Cardio 35min</p>
+</header>
+
+<div class="day">
+<h2>App funcionando ✔</h2>
+<p>Se você está vendo isso, o HTML está correto.</p>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>
