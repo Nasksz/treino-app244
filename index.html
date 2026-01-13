@@ -2,54 +2,53 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Treino Avançado</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treino Avançado • Dark Aesthetic</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
 
 <style>
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#0b0f1a;
-  color:#fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(180deg,#020617,#020617,#020617);
+  color:#e5e7eb;
 }
 header{
+  padding:20px;
   text-align:center;
-  padding:20px;
-  background:#0f172a;
-}
-section{
-  padding:20px;
-  margin:15px;
-  background:#111827;
-  border-radius:12px;
-}
-h2{
-  color:#38bdf8;
-}
-input,select{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
   background:#020617;
-  color:#fff;
-  border:1px solid #334155;
+  border-bottom:1px solid #1e293b;
+}
+h1{font-size:1.5rem;margin:0;}
+.container{padding:16px;max-width:900px;margin:auto;}
+.day{
+  background:#020617;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.day h2{margin-top:0;color:#38bdf8;}
+.exercise{
+  display:grid;
+  grid-template-columns:1fr 80px 80px;
+  gap:8px;
+  margin-bottom:6px;
+  font-size:.9rem;
+}
+input{
+  background:#020617;
+  border:1px solid #1e293b;
   border-radius:8px;
+  color:#e5e7eb;
+  padding:6px;
 }
-button{
-  width:100%;
-  padding:12px;
-  background:#22c55e;
-  border:none;
-  color:#000;
-  font-weight:bold;
-  border-radius:10px;
-  cursor:pointer;
-}
-canvas{
-  background:#020617;
-  border-radius:12px;
-  padding:10px;
+.cardio{
+  margin-top:8px;
+  padding:8px;
+  border-left:4px solid #22c55e;
 }
 </style>
 </head>
@@ -57,80 +56,88 @@ canvas{
 <body>
 
 <header>
-  <h1>🏋️ Treino Avançado</h1>
-  <p>Mobilidade • Hipertrofia • Cardio</p>
+  <h1>🏋️ Treino Avançado • PWA</h1>
+  <p>Mobilidade + Hipertrofia + Cardio (35min)</p>
 </header>
 
-<section>
-<h2>Registrar Carga</h2>
+<div class="container">
 
-<select id="exercicio">
-<option value="">Selecione</option>
-<option value="Supino">Supino</option>
-<option value="Agachamento">Agachamento</option>
-<option value="Puxada">Puxada</option>
-<option value="Leg Press">Leg Press</option>
-</select>
+<div class="day">
+<h2>Segunda — Peito • Tríceps • Ombro</h2>
+<p>Mobilidade: ombro, escápula, coluna torácica</p>
 
-<input id="kg" type="number" placeholder="Carga (kg)">
-<button onclick="salvar()">Salvar</button>
-</section>
+<div class="exercise"><span>Supino reto</span><input placeholder="Carga"><input placeholder="Obs"></div>
+<div class="exercise"><span>Supino inclinado</span><input placeholder="Carga"><input placeholder="Obs"></div>
+<div class="exercise"><span>Crossover</span><input placeholder="Carga"><input placeholder="Obs"></div>
+<div class="exercise"><span>Desenvolvimento</span><input placeholder="Carga"><input placeholder="Obs"></div>
+<div class="exercise"><span>Tríceps corda</span><input placeholder="Carga"><input placeholder="Obs"></div>
 
-<section>
-<h2>📊 Evolução de Carga</h2>
-<select id="grafEx" onchange="grafico()"></select>
-<canvas id="graf"></canvas>
-</section>
+<div class="cardio">Cardio: 35 min (esteira / bike)</div>
+</div>
 
-<script>
-let ctx=document.getElementById("graf").getContext("2d");
-let chart;
+<div class="day">
+<h2>Terça — Costas • Bíceps • Antebraço</h2>
+<p>Mobilidade: coluna, escápula</p>
 
-function salvar(){
- let ex=document.getElementById("exercicio").value;
- let kg=document.getElementById("kg").value;
- if(!ex||!kg) return alert("Preencha tudo");
+<div class="exercise"><span>Puxada alta</span><input><input></div>
+<div class="exercise"><span>Remada curvada</span><input><input></div>
+<div class="exercise"><span>Remada baixa</span><input><input></div>
+<div class="exercise"><span>Rosca direta</span><input><input></div>
+<div class="exercise"><span>Rosca martelo</span><input><input></div>
 
- let dados=JSON.parse(localStorage.getItem(ex)||"[]");
- dados.push({data:new Date().toLocaleDateString(),kg});
- localStorage.setItem(ex,JSON.stringify(dados));
+<div class="cardio">Cardio: 35 min</div>
+</div>
 
- alert("Carga salva!");
- carregarSelect();
-}
+<div class="day">
+<h2>Quarta — Pernas (joelho valgo)</h2>
+<p>Mobilidade: quadril, tornozelo, glúteos</p>
 
-function carregarSelect(){
- let s=document.getElementById("grafEx");
- s.innerHTML="<option value=''>Selecione</option>";
- Object.keys(localStorage).forEach(e=>{
-  let o=document.createElement("option");
-  o.value=e; o.textContent=e;
-  s.appendChild(o);
- });
-}
+<div class="exercise"><span>Agachamento</span><input><input></div>
+<div class="exercise"><span>Leg press</span><input><input></div>
+<div class="exercise"><span>Cadeira abdutora</span><input><input></div>
+<div class="exercise"><span>Passada</span><input><input></div>
+<div class="exercise"><span>Elevação pélvica</span><input><input></div>
 
-function grafico(){
- let ex=document.getElementById("grafEx").value;
- let dados=JSON.parse(localStorage.getItem(ex)||"[]");
- let labels=dados.map(d=>d.data);
- let valores=dados.map(d=>d.kg);
+<div class="cardio">Cardio: 35 min</div>
+</div>
 
- if(chart) chart.destroy();
- chart=new Chart(ctx,{
-  type:"line",
-  data:{
-   labels,
-   datasets:[{
-     label:ex,
-     data:valores,
-     borderWidth:2
-   }]
-  }
- });
-}
+<div class="day">
+<h2>Quinta — Peito</h2>
+<p>Mobilidade: ombros</p>
 
-carregarSelect();
-</script>
+<div class="exercise"><span>Supino halter</span><input><input></div>
+<div class="exercise"><span>Crucifixo</span><input><input></div>
 
+<div class="cardio">Cardio: 35 min</div>
+</div>
+
+<div class="day">
+<h2>Sexta — Costas • Bíceps</h2>
+<p>Mobilidade: costas</p>
+
+<div class="exercise"><span>Barra fixa</span><input><input></div>
+<div class="exercise"><span>Remada unilateral</span><input><input></div>
+
+<div class="cardio">Cardio: 35 min</div>
+</div>
+
+<div class="day">
+<h2>Sábado — Pernas</h2>
+
+<div class="exercise"><span>Agacho sumô</span><input><input></div>
+<div class="exercise"><span>Stiff</span><input><input></div>
+
+<div class="cardio">Cardio: 35 min</div>
+</div>
+
+<div class="day">
+<h2>Domingo — Detalhes</h2>
+
+<div class="exercise"><span>Core</span><input><input></div>
+<div class="exercise"><span>Panturrilha</span><input><input></div>
+
+</div>
+
+</div>
 </body>
 </html>
