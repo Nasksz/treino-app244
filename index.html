@@ -3,40 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treino Avançado • Dark Aesthetic</title>
+<title>Treino Avançado • App</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#020617">
 
 <style>
 body{
   margin:0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(180deg,#020617,#020617,#020617);
+  font-family: system-ui, Arial;
+  background:#020617;
   color:#e5e7eb;
 }
 header{
-  padding:20px;
+  padding:16px;
   text-align:center;
-  background:#020617;
   border-bottom:1px solid #1e293b;
 }
-h1{font-size:1.5rem;margin:0;}
+h1{margin:0;font-size:1.4rem;}
 .container{padding:16px;max-width:900px;margin:auto;}
 .day{
-  background:#020617;
   border:1px solid #1e293b;
   border-radius:16px;
   padding:16px;
   margin-bottom:16px;
 }
-.day h2{margin-top:0;color:#38bdf8;}
+.day h2{margin:0 0 8px;color:#38bdf8;}
 .exercise{
   display:grid;
-  grid-template-columns:1fr 80px 80px;
-  gap:8px;
+  grid-template-columns:1fr 70px 70px 30px;
+  gap:6px;
   margin-bottom:6px;
-  font-size:.9rem;
 }
 input{
   background:#020617;
@@ -44,100 +41,199 @@ input{
   border-radius:8px;
   color:#e5e7eb;
   padding:6px;
+  text-align:center;
 }
+.check{accent-color:#22c55e;}
 .cardio{
   margin-top:8px;
   padding:8px;
   border-left:4px solid #22c55e;
 }
+.timer{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  background:#020617;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:12px;
+  text-align:center;
+}
+button{
+  background:#22c55e;
+  border:none;
+  border-radius:8px;
+  padding:6px 10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+  select{
+  width:100%;
+  padding:8px;
+  background:#020617;
+  color:#e5e7eb;
+  border:1px solid #1e293b;
+  border-radius:8px;
+  margin-bottom:8px;
+}
+canvas{
+  background:#020617;
+  border-radius:12px;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🏋️ Treino Avançado • PWA</h1>
-  <p>Mobilidade + Hipertrofia + Cardio (35min)</p>
+<h1>🏋️ Treino Avançado</h1>
+<p>Mobilidade • Hipertrofia • Cardio</p>
 </header>
 
-<div class="container">
-
+<div class="container" id="app"></div>
 <div class="day">
-<h2>Segunda — Peito • Tríceps • Ombro</h2>
-<p>Mobilidade: ombro, escápula, coluna torácica</p>
-
-<div class="exercise"><span>Supino reto</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Supino inclinado</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Crossover</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Desenvolvimento</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Tríceps corda</span><input placeholder="Carga"><input placeholder="Obs"></div>
-
-<div class="cardio">Cardio: 35 min (esteira / bike)</div>
+  <h2>📊 Evolução de Carga</h2>
+  <select id="selectEx">
+    <option value="">Selecione um exercício</option>
+  </select>
+  <canvas id="grafico" height="200"></canvas>
 </div>
 
-<div class="day">
-<h2>Terça — Costas • Bíceps • Antebraço</h2>
-<p>Mobilidade: coluna, escápula</p>
-
-<div class="exercise"><span>Puxada alta</span><input><input></div>
-<div class="exercise"><span>Remada curvada</span><input><input></div>
-<div class="exercise"><span>Remada baixa</span><input><input></div>
-<div class="exercise"><span>Rosca direta</span><input><input></div>
-<div class="exercise"><span>Rosca martelo</span><input><input></div>
-
-<div class="cardio">Cardio: 35 min</div>
+<div class="timer">
+<p id="time">00:00</p>
+<button onclick="startTimer()">▶</button>
+<button onclick="resetTimer()">⏹</button>
 </div>
 
-<div class="day">
-<h2>Quarta — Pernas (joelho valgo)</h2>
-<p>Mobilidade: quadril, tornozelo, glúteos</p>
+<script>
+const treinos = {
+"Segunda — Peito • Tríceps • Ombro":[
+"Supino reto","Supino inclinado","Crossover","Desenvolvimento","Tríceps corda"
+],
+"Terça — Costas • Bíceps":[
+"Puxada alta","Remada curvada","Remada baixa","Rosca direta","Rosca martelo"
+],
+"Quarta — Pernas (joelho valgo)":[
+"Agachamento","Leg press","Cadeira abdutora","Passada","Elevação pélvica"
+],
+"Quinta — Peito":[
+"Supino halter","Crucifixo","Peck deck"
+],
+"Sexta — Costas • Bíceps":[
+"Barra fixa","Remada unilateral","Pulldown"
+],
+"Sábado — Pernas":[
+"Agacho sumô","Stiff","Mesa flexora","Panturrilha"
+],
+"Domingo — Detalhes":[
+"Core","Abdômen","Alongamentos"
+]
+};
 
-<div class="exercise"><span>Agachamento</span><input><input></div>
-<div class="exercise"><span>Leg press</span><input><input></div>
-<div class="exercise"><span>Cadeira abdutora</span><input><input></div>
-<div class="exercise"><span>Passada</span><input><input></div>
-<div class="exercise"><span>Elevação pélvica</span><input><input></div>
+const app = document.getElementById("app");
 
-<div class="cardio">Cardio: 35 min</div>
-</div>
+Object.entries(treinos).forEach(([dia,exs])=>{
+  const d=document.createElement("div");
+  d.className="day";
+  d.innerHTML=`<h2>${dia}</h2>`;
+  exs.forEach(e=>{
+    const id=dia+e;
+    d.innerHTML+=`
+    <div class="exercise">
+      <span>${e}</span>
+      <input placeholder="kg" value="${localStorage[id+'kg']||''}"
+        oninput="localStorage['${id}kg']=this.value">
+      <input placeholder="obs" value="${localStorage[id+'obs']||''}"
+        oninput="localStorage['${id}obs']=this.value">
+      <input type="checkbox" class="check"
+        ${localStorage[id+'ck']?'checked':''}
+        onchange="this.checked?localStorage['${id}ck']=1:localStorage.removeItem('${id}ck')">
+    </div>`;
+  });
+  d.innerHTML+=`<div class="cardio">Cardio: 35 min</div>`;
+  app.appendChild(d);
+});
 
-<div class="day">
-<h2>Quinta — Peito</h2>
-<p>Mobilidade: ombros</p>
+// TIMER
+let s=0,interval;
+function startTimer(){
+  clearInterval(interval);
+  interval=setInterval(()=>{
+    s++;
+    document.getElementById("time").innerText=
+    String(Math.floor(s/60)).padStart(2,'0')+":"+String(s%60).padStart(2,'0');
+  },1000);
+}
+function resetTimer(){
+  clearInterval(interval);
+  s=0;
+  document.getElementById("time").innerText="00:00";
+}
 
-<div class="exercise"><span>Supino halter</span><input><input></div>
-<div class="exercise"><span>Crucifixo</span><input><input></div>
+// SERVICE WORKER
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const select = document.getElementById("selectEx");
+const ctx = document.getElementById("grafico").getContext("2d");
+let chart;
 
-<div class="cardio">Cardio: 35 min</div>
-</div>
+const exercicios = [];
+for(let k in localStorage){
+  if(k.endsWith("kg")){
+    exercicios.push(k.replace("kg",""));
+  }
+}
 
-<div class="day">
-<h2>Sexta — Costas • Bíceps</h2>
-<p>Mobilidade: costas</p>
+[...new Set(exercicios)].forEach(e=>{
+  const o=document.createElement("option");
+  o.value=e;
+  o.textContent=e;
+  select.appendChild(o);
+});
 
-<div class="exercise"><span>Barra fixa</span><input><input></div>
-<div class="exercise"><span>Remada unilateral</span><input><input></div>
+select.onchange=()=>{
+  const ex=select.value;
+  if(!ex)return;
 
-<div class="cardio">Cardio: 35 min</div>
-</div>
+  const dados=[];
+  const labels=[];
 
-<div class="day">
-<h2>Sábado — Pernas</h2>
+  for(let i=1;i<=10;i++){
+    const v=localStorage[ex+"kg"];
+    if(v){
+      dados.push(Number(v));
+      labels.push("Treino");
+    }
+  }
 
-<div class="exercise"><span>Agacho sumô</span><input><input></div>
-<div class="exercise"><span>Stiff</span><input><input></div>
+  if(chart)chart.destroy();
+  chart=new Chart(ctx,{
+    type:"line",
+    data:{
+      labels,
+      datasets:[{
+        label:"Carga (kg)",
+        data:dados,
+        borderWidth:2,
+        tension:.4
+      }]
+    },
+    options:{
+      plugins:{legend:{labels:{color:"#e5e7eb"}}},
+      scales:{
+        x:{ticks:{color:"#94a3b8"}},
+        y:{ticks:{color:"#94a3b8"}}
+      }
+    }
+  });
+};
+</script>
 
-<div class="cardio">Cardio: 35 min</div>
-</div>
+</script>
 
-<div class="day">
-<h2>Domingo — Detalhes</h2>
-
-<div class="exercise"><span>Core</span><input><input></div>
-<div class="exercise"><span>Panturrilha</span><input><input></div>
-
-</div>
-
-</div>
 </body>
 </html>
