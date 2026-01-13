@@ -2,74 +2,54 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treino Avançado • App</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#020617">
-
+<title>Treino Avançado</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
   margin:0;
-  font-family:system-ui,Arial;
-  background:#020617;
-  color:#e5e7eb;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0b0f1a;
+  color:#fff;
 }
 header{
-  padding:16px;
   text-align:center;
-  border-bottom:1px solid #1e293b;
+  padding:20px;
+  background:#0f172a;
 }
-.container{padding:16px;max-width:900px;margin:auto;}
-.day{
-  border:1px solid #1e293b;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
+section{
+  padding:20px;
+  margin:15px;
+  background:#111827;
+  border-radius:12px;
 }
-.day h2{margin:0 0 10px;color:#38bdf8;}
-.exercise{
-  display:grid;
-  grid-template-columns:1fr 70px 70px 30px;
-  gap:6px;
-  margin-bottom:6px;
+h2{
+  color:#38bdf8;
 }
 input,select{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
   background:#020617;
-  border:1px solid #1e293b;
+  color:#fff;
+  border:1px solid #334155;
   border-radius:8px;
-  color:#e5e7eb;
-  padding:6px;
-  text-align:center;
-}
-.check{accent-color:#22c55e;}
-.cardio{
-  margin-top:8px;
-  padding:8px;
-  border-left:4px solid #22c55e;
-}
-.timer{
-  position:fixed;
-  bottom:16px;
-  right:16px;
-  background:#020617;
-  border:1px solid #1e293b;
-  border-radius:16px;
-  padding:12px;
-  text-align:center;
 }
 button{
+  width:100%;
+  padding:12px;
   background:#22c55e;
   border:none;
-  border-radius:8px;
-  padding:6px 10px;
+  color:#000;
   font-weight:bold;
+  border-radius:10px;
+  cursor:pointer;
 }
 canvas{
   background:#020617;
   border-radius:12px;
+  padding:10px;
 }
 </style>
 </head>
@@ -77,111 +57,80 @@ canvas{
 <body>
 
 <header>
-<h1>🏋️ Treino Avançado</h1>
-<p>Mobilidade • Hipertrofia • Cardio</p>
+  <h1>🏋️ Treino Avançado</h1>
+  <p>Mobilidade • Hipertrofia • Cardio</p>
 </header>
 
-<div class="container" id="app"></div>
+<section>
+<h2>Registrar Carga</h2>
 
-<div class="container">
-  <div class="day">
-    <h2>📊 Evolução de Carga</h2>
-    <select id="selectEx">
-      <option value="">Selecione um exercício</option>
-    </select>
-    <canvas id="grafico" height="200"></canvas>
-  </div>
-</div>
+<select id="exercicio">
+<option value="">Selecione</option>
+<option value="Supino">Supino</option>
+<option value="Agachamento">Agachamento</option>
+<option value="Puxada">Puxada</option>
+<option value="Leg Press">Leg Press</option>
+</select>
 
-<div class="timer">
-<p id="time">00:00</p>
-<button onclick="startTimer()">▶</button>
-<button onclick="resetTimer()">⏹</button>
-</div>
+<input id="kg" type="number" placeholder="Carga (kg)">
+<button onclick="salvar()">Salvar</button>
+</section>
+
+<section>
+<h2>📊 Evolução de Carga</h2>
+<select id="grafEx" onchange="grafico()"></select>
+<canvas id="graf"></canvas>
+</section>
 
 <script>
-const treinos = {
-"Segunda — Peito • Tríceps • Ombro":[
-"Supino reto","Supino inclinado","Crossover","Desenvolvimento","Tríceps corda"
-],
-"Terça — Costas • Bíceps • Antebraço":[
-"Puxada alta","Remada curvada","Remada baixa","Rosca direta","Rosca martelo"
-],
-"Quarta — Pernas (joelho valgo)":[
-"Agachamento","Leg press","Cadeira abdutora","Passada","Elevação pélvica"
-],
-"Quinta — Peito":[
-"Supino halter","Crucifixo","Peck deck"
-],
-"Sexta — Costas • Bíceps":[
-"Barra fixa","Remada unilateral","Pulldown"
-],
-"Sábado — Pernas":[
-"Agacho sumô","Stiff","Mesa flexora","Panturrilha"
-],
-"Domingo — Detalhes":[
-"Core","Abdômen","Alongamento"
-]
-};
-
-const app=document.getElementById("app");
-const select=document.getElementById("selectEx");
-const ctx=document.getElementById("grafico").getContext("2d");
+let ctx=document.getElementById("graf").getContext("2d");
 let chart;
 
-// RENDER TREINOS
-Object.entries(treinos).forEach(([dia,exs])=>{
-  const d=document.createElement("div");
-  d.className="day";
-  d.innerHTML=`<h2>${dia}</h2>`;
-  exs.forEach(ex=>{
-    const key=(dia+ex).replace(/\s+/g,'_');
-    d.innerHTML+=`
-    <div class="exercise">
-      <span>${ex}</span>
-      <input placeholder="kg" value="${localStorage[key+'kg']||''}"
-        oninput="localStorage['${key}kg']=this.value">
-      <input placeholder="obs" value="${localStorage[key+'obs']||''}"
-        oninput="localStorage['${key}obs']=this.value">
-      <input type="checkbox" class="check"
-        ${localStorage[key+'ck']?'checked':''}
-        onchange="this.checked?localStorage['${key}ck']=1:localStorage.removeItem('${key}ck')">
-    </div>`;
-  });
-  d.innerHTML+=`<div class="cardio">Cardio: 35 min</div>`;
-  app.appendChild(d);
-});
+function salvar(){
+ let ex=document.getElementById("exercicio").value;
+ let kg=document.getElementById("kg").value;
+ if(!ex||!kg) return alert("Preencha tudo");
 
-// POPULAR SELECT COM TODOS EXERCÍCIOS
-Object.values(treinos).flat().forEach(ex=>{
-  const id=ex.replace(/\s+/g,'_');
-  const opt=document.createElement("option");
-  opt.value=id;
-  opt.textContent=ex;
-  select.appendChild(opt);
-});
+ let dados=JSON.parse(localStorage.getItem(ex)||"[]");
+ dados.push({data:new Date().toLocaleDateString(),kg});
+ localStorage.setItem(ex,JSON.stringify(dados));
 
-select.onchange=atualizaGrafico;
+ alert("Carga salva!");
+ carregarSelect();
+}
 
-// GRÁFICO
-function atualizaGrafico(){
-  const ex=select.value;
-  if(!ex)return;
+function carregarSelect(){
+ let s=document.getElementById("grafEx");
+ s.innerHTML="<option value=''>Selecione</option>";
+ Object.keys(localStorage).forEach(e=>{
+  let o=document.createElement("option");
+  o.value=e; o.textContent=e;
+  s.appendChild(o);
+ });
+}
 
-  const dados=[];
-  const labels=[];
+function grafico(){
+ let ex=document.getElementById("grafEx").value;
+ let dados=JSON.parse(localStorage.getItem(ex)||"[]");
+ let labels=dados.map(d=>d.data);
+ let valores=dados.map(d=>d.kg);
 
-  for(let k in localStorage){
-    if(k.includes(ex) && k.endsWith("kg")){
-      dados.push(Number(localStorage[k]));
-      labels.push("Treino");
-    }
+ if(chart) chart.destroy();
+ chart=new Chart(ctx,{
+  type:"line",
+  data:{
+   labels,
+   datasets:[{
+     label:ex,
+     data:valores,
+     borderWidth:2
+   }]
   }
+ });
+}
 
-  if(dados.length===0){
-    alert("Ainda não há cargas salvas para este exercício.");
-    return;
-  }
+carregarSelect();
+</script>
 
-  if(chart)chart.destroy();
-  chart=new Chart(ctx,{
+</body>
+</html>
