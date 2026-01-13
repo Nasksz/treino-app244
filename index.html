@@ -1,57 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treino Avançado • App</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020617">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,Arial;
+  background:#020617;
+  color:#e5e7eb;
+}
+header{
+  padding:16px;
+  text-align:center;
+  border-bottom:1px solid #1e293b;
+}
+.container{padding:16px;max-width:900px;margin:auto;}
+.day{
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.day h2{margin:0 0 10px;color:#38bdf8;}
+.exercise{
+  display:grid;
+  grid-template-columns:1fr 70px 70px 30px;
+  gap:6px;
+  margin-bottom:6px;
+}
+input,select{
+  background:#020617;
+  border:1px solid #1e293b;
+  border-radius:8px;
+  color:#e5e7eb;
+  padding:6px;
+  text-align:center;
+}
+.check{accent-color:#22c55e;}
+.cardio{
+  margin-top:8px;
+  padding:8px;
+  border-left:4px solid #22c55e;
+}
+.timer{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  background:#020617;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:12px;
+  text-align:center;
+}
+button{
+  background:#22c55e;
+  border:none;
+  border-radius:8px;
+  padding:6px 10px;
+  font-weight:bold;
+}
+canvas{
+  background:#020617;
+  border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🏋️ Treino Avançado</h1>
+<p>Mobilidade • Hipertrofia • Cardio</p>
+</header>
+
+<div class="container" id="app"></div>
+
+<div class="container">
+  <div class="day">
+    <h2>📊 Evolução de Carga</h2>
+    <select id="selectEx">
+      <option value="">Selecione um exercício</option>
+    </select>
+    <canvas id="grafico" height="200"></canvas>
+  </div>
+</div>
+
+<div class="timer">
+<p id="time">00:00</p>
+<button onclick="startTimer()">▶</button>
+<button onclick="resetTimer()">⏹</button>
+</div>
+
 <script>
-const select = document.getElementById("selectEx");
-const ctx = document.getElementById("grafico").getContext("2d");
+const treinos = {
+"Segunda — Peito • Tríceps • Ombro":[
+"Supino reto","Supino inclinado","Crossover","Desenvolvimento","Tríceps corda"
+],
+"Terça — Costas • Bíceps • Antebraço":[
+"Puxada alta","Remada curvada","Remada baixa","Rosca direta","Rosca martelo"
+],
+"Quarta — Pernas (joelho valgo)":[
+"Agachamento","Leg press","Cadeira abdutora","Passada","Elevação pélvica"
+],
+"Quinta — Peito":[
+"Supino halter","Crucifixo","Peck deck"
+],
+"Sexta — Costas • Bíceps":[
+"Barra fixa","Remada unilateral","Pulldown"
+],
+"Sábado — Pernas":[
+"Agacho sumô","Stiff","Mesa flexora","Panturrilha"
+],
+"Domingo — Detalhes":[
+"Core","Abdômen","Alongamento"
+]
+};
+
+const app=document.getElementById("app");
+const select=document.getElementById("selectEx");
+const ctx=document.getElementById("grafico").getContext("2d");
 let chart;
 
-const exercicios = [];
-for(let k in localStorage){
-  if(k.endsWith("kg")){
-    exercicios.push(k.replace("kg",""));
-  }
-}
-
-[...new Set(exercicios)].forEach(e=>{
-  const o=document.createElement("option");
-  o.value=e;
-  o.textContent=e;
-  select.appendChild(o);
+// RENDER TREINOS
+Object.entries(treinos).forEach(([dia,exs])=>{
+  const d=document.createElement("div");
+  d.className="day";
+  d.innerHTML=`<h2>${dia}</h2>`;
+  exs.forEach(ex=>{
+    const key=(dia+ex).replace(/\s+/g,'_');
+    d.innerHTML+=`
+    <div class="exercise">
+      <span>${ex}</span>
+      <input placeholder="kg" value="${localStorage[key+'kg']||''}"
+        oninput="localStorage['${key}kg']=this.value">
+      <input placeholder="obs" value="${localStorage[key+'obs']||''}"
+        oninput="localStorage['${key}obs']=this.value">
+      <input type="checkbox" class="check"
+        ${localStorage[key+'ck']?'checked':''}
+        onchange="this.checked?localStorage['${key}ck']=1:localStorage.removeItem('${key}ck')">
+    </div>`;
+  });
+  d.innerHTML+=`<div class="cardio">Cardio: 35 min</div>`;
+  app.appendChild(d);
 });
 
-select.onchange=()=>{
+// POPULAR SELECT COM TODOS EXERCÍCIOS
+Object.values(treinos).flat().forEach(ex=>{
+  const id=ex.replace(/\s+/g,'_');
+  const opt=document.createElement("option");
+  opt.value=id;
+  opt.textContent=ex;
+  select.appendChild(opt);
+});
+
+select.onchange=atualizaGrafico;
+
+// GRÁFICO
+function atualizaGrafico(){
   const ex=select.value;
   if(!ex)return;
 
   const dados=[];
   const labels=[];
 
-  for(let i=1;i<=10;i++){
-    const v=localStorage[ex+"kg"];
-    if(v){
-      dados.push(Number(v));
+  for(let k in localStorage){
+    if(k.includes(ex) && k.endsWith("kg")){
+      dados.push(Number(localStorage[k]));
       labels.push("Treino");
     }
   }
 
+  if(dados.length===0){
+    alert("Ainda não há cargas salvas para este exercício.");
+    return;
+  }
+
   if(chart)chart.destroy();
   chart=new Chart(ctx,{
-    type:"line",
-    data:{
-      labels,
-      datasets:[{
-        label:"Carga (kg)",
-        data:dados,
-        borderWidth:2,
-        tension:.4
-      }]
-    },
-    options:{
-      plugins:{legend:{labels:{color:"#e5e7eb"}}},
-      scales:{
-        x:{ticks:{color:"#94a3b8"}},
-        y:{ticks:{color:"#94a3b8"}}
-      }
-    }
-  });
-};
-</script>
