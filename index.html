@@ -3,141 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treino Avançado • Dark Aesthetic</title>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
+<title>Treino Mobile</title>
 
 <style>
-body{
-  margin:0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(180deg,#020617,#020617,#020617);
-  color:#e5e7eb;
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+    margin: 0;
+    padding: 12px;
 }
-header{
-  padding:20px;
-  text-align:center;
-  background:#020617;
-  border-bottom:1px solid #1e293b;
+
+h1, h2, h3 {
+    color: #38bdf8;
+    margin-top: 10px;
 }
-h1{font-size:1.5rem;margin:0;}
-.container{padding:16px;max-width:900px;margin:auto;}
-.day{
-  background:#020617;
-  border:1px solid #1e293b;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
+
+.card {
+    background: #020617;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 18px;
 }
-.day h2{margin-top:0;color:#38bdf8;}
-.exercise{
-  display:grid;
-  grid-template-columns:1fr 80px 80px;
-  gap:8px;
-  margin-bottom:6px;
-  font-size:.9rem;
+
+.exercise {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 12px;
 }
-input{
-  background:#020617;
-  border:1px solid #1e293b;
-  border-radius:8px;
-  color:#e5e7eb;
-  padding:6px;
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-top: 6px;
 }
-.cardio{
-  margin-top:8px;
-  padding:8px;
-  border-left:4px solid #22c55e;
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 4px;
+    background: #020617;
+    color: #e5e7eb;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+ul {
+    padding-left: 18px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>🏋️ Treino Avançado • PWA</h1>
-  <p>Mobilidade + Hipertrofia + Cardio (35min)</p>
-</header>
+<h1>🏋️ Treino – Mobile</h1>
 
-<div class="container">
-
-<div class="day">
-<h2>Segunda — Peito • Tríceps • Ombro</h2>
-<p>Mobilidade: ombro, escápula, coluna torácica</p>
-
-<div class="exercise"><span>Supino reto</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Supino inclinado</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Crossover</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Desenvolvimento</span><input placeholder="Carga"><input placeholder="Obs"></div>
-<div class="exercise"><span>Tríceps corda</span><input placeholder="Carga"><input placeholder="Obs"></div>
-
-<div class="cardio">Cardio: 35 min (esteira / bike)</div>
+<div class="card">
+<h2>📌 Dados</h2>
+<p>19 anos • 1,90m • 110kg</p>
+<p>Avançado • Hipertrofia + Emagrecimento</p>
 </div>
 
-<div class="day">
-<h2>Terça — Costas • Bíceps • Antebraço</h2>
-<p>Mobilidade: coluna, escápula</p>
+<div class="card">
+<h2>SEGUNDA – Peito + Tríceps</h2>
 
-<div class="exercise"><span>Puxada alta</span><input><input></div>
-<div class="exercise"><span>Remada curvada</span><input><input></div>
-<div class="exercise"><span>Remada baixa</span><input><input></div>
-<div class="exercise"><span>Rosca direta</span><input><input></div>
-<div class="exercise"><span>Rosca martelo</span><input><input></div>
+<h3>🧘 Mobilidade Ombro/Peito</h3>
+<ul>
+<li>Rotação externa elástico – 2x15</li>
+<li>Alongamento peitoral – 30s</li>
+<li>Ativação escapular – 2x12</li>
+</ul>
 
-<div class="cardio">Cardio: 35 min</div>
+<div class="exercise">
+<strong>Supino reto (barra)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
 </div>
 
-<div class="day">
-<h2>Quarta — Pernas (joelho valgo)</h2>
-<p>Mobilidade: quadril, tornozelo, glúteos</p>
-
-<div class="exercise"><span>Agachamento</span><input><input></div>
-<div class="exercise"><span>Leg press</span><input><input></div>
-<div class="exercise"><span>Cadeira abdutora</span><input><input></div>
-<div class="exercise"><span>Passada</span><input><input></div>
-<div class="exercise"><span>Elevação pélvica</span><input><input></div>
-
-<div class="cardio">Cardio: 35 min</div>
+<div class="exercise">
+<strong>Supino inclinado (halter)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
 </div>
 
-<div class="day">
-<h2>Quinta — Peito</h2>
-<p>Mobilidade: ombros</p>
-
-<div class="exercise"><span>Supino halter</span><input><input></div>
-<div class="exercise"><span>Crucifixo</span><input><input></div>
-
-<div class="cardio">Cardio: 35 min</div>
+<div class="exercise">
+<strong>Crucifixo inclinado</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
 </div>
 
-<div class="day">
-<h2>Sexta — Costas • Bíceps</h2>
-<p>Mobilidade: costas</p>
-
-<div class="exercise"><span>Barra fixa</span><input><input></div>
-<div class="exercise"><span>Remada unilateral</span><input><input></div>
-
-<div class="cardio">Cardio: 35 min</div>
+<div class="exercise">
+<strong>Paralela com peso</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
 </div>
 
-<div class="day">
-<h2>Sábado — Pernas</h2>
-
-<div class="exercise"><span>Agacho sumô</span><input><input></div>
-<div class="exercise"><span>Stiff</span><input><input></div>
-
-<div class="cardio">Cardio: 35 min</div>
-</div>
-
-<div class="day">
-<h2>Domingo — Detalhes</h2>
-
-<div class="exercise"><span>Core</span><input><input></div>
-<div class="exercise"><span>Panturrilha</span><input><input></div>
-
+<div class="exercise">
+<strong>Tríceps testa (barra W)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
 </div>
 
 </div>
+
+<div class="card">
+<h2>QUARTA – Costas + Bíceps</h2>
+
+<h3>🧘 Mobilidade Coluna/Escápula</h3>
+<ul>
+<li>Mobilidade torácica – 2x10</li>
+<li>Alongamento dorsal na barra – 30s</li>
+</ul>
+
+<div class="exercise">
+<strong>Barra fixa com peso</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+<div class="exercise">
+<strong>Remada curvada (barra)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+<div class="exercise">
+<strong>Rosca direta (barra)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+</div>
+
+<div class="card">
+<h2>QUINTA – Pernas (Joelho Valgo)</h2>
+
+<h3>🧘 Mobilidade + Correção</h3>
+<ul>
+<li>Abdução quadril mini band – 2x15</li>
+<li>Mobilidade tornozelo – 2x10</li>
+<li>Agachamento com elástico – 2x12</li>
+</ul>
+
+<div class="exercise">
+<strong>Agachamento livre</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+<div class="exercise">
+<strong>Leg press (pés abertos)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+<div class="exercise">
+<strong>Stiff (barra)</strong>
+<label>Peso (kg)</label>
+<input type="number">
+<label>Repetições</label>
+<input type="number">
+</div>
+
+</div>
+
 </body>
 </html>
